@@ -74,15 +74,21 @@ head(uscrime)
 
 Rabbit
 
+# help 함수와 같은기능
 help(median)
 ?median
+
+#함수 내 사용법 출력
 args(median)
 
+# 함수 사용예
 example(median)
 
+# 함수 이름이 잘 기억안날때 일부 문자열 포함 함수 찾기
 help.search("xyplot")
 ??xyplot
 
+# 특정 문자열 포함 벡터, 함수 찾기
 hero.vector <- c("superman", "batman", "spiderman")
 apropos("vector")
 
@@ -93,6 +99,7 @@ apropos("q$")
 apropos("[7-9]")
 apropos("xy+")
 
+# 웹사이트로 r내용찾기
 RSiteSearch("topicmodel")
 
 
@@ -100,22 +107,26 @@ install.packages("sos")
 library(sos)
 findFn("social network analysis")
 
-#data set
+#데이터 구조
 
-
+#벡터는 문자면 문자 숫자면 숫자인 한종류의 논리값으로만 구성가능
 c(1,2,3,4,5)
-#numb.vector
 c("a", "b", "c", "a", "b")
-#lil.vector
+
+# 팩터는 범주형 데이터로 구성(제품등급같이)
 factor(c("a", "b", "c", "a", "b"))
-#lil. factor(ordered factor)
+
+#행렬 행3개 열 4개
 matrix(1:12, 3, 4)
-#numb. matrix
+
+#배열(차원의 크기가 다를분 행렬과 같다 2*3*2
 array(1:12, c(2,3,2))
-#numb. array
+
+#데이터 프레임(숫자와 문자 같이 존재가능,그러나 갯수가 같아야함)
 data.frame(product=c("a", "b", "c"),
            price=c(100,200,300))
-# complex. data frame
+
+# 리스트( 이것저것 다 집합, 갯수 안같아도됨)
 list(x=c("a", "b", "c", "a", "b"),
      y=matrix(1:12, 3, 4),
      z=data.frame(product=c("a", "b", "c"),
@@ -124,39 +135,42 @@ list(x=c("a", "b", "c", "a", "b"),
 
 
 
-# create vector
+# 벡터 생성
 
 c(1,2,3,4,5,6,7,8,9,10)
 c("we", "love", "data","analytics")
 c(TRUE, FALSE, TRUE, FALSE)
 
+# 벡터 결합
 odd <- c(1,3,5)
 even <- c(2,4,6)
 odd
 even
 c(odd,even)
 
+# 연속숫자 생성
 3:9
 9:3
 5:-3
 
-# seq f
+# 정수가 아닌 간격으로 숫자만들기
 ?seq()
 seq(from=3, to=9)
 seq(from=3, to=9, by=2)
 seq(from=3.5, to=1.5, by=-0.5)
 
+# 수열 갯수 지정하여 일정간격 수 얻기
 seq(from=0, to=100, length.out=5)
 seq(from=-2, to=1, length.out=5)
 
-# rep
+# 반복
 rep(1, times=3)
 rep(c(1,2,3), times=3)
 rep(c(1,2,3), each=3)
 rep(c(1,2,3), times=c(1,2,3))
 rep(c(1,2,3), length.out=8)
 
-# 벡터는 항상 같은 문자면 문자, 숫자면 숫자로 쓰여야함
+# 벡터는 항상 같은 문자면 문자, 숫자면 숫자로 쓰여야함 같이 묶으면 숫자가 문자로 바뀜
 
 num <- c(1,2,3)
 cha <- c("x", "y", "z")
@@ -166,7 +180,7 @@ c(num, cha)
 str(num)
 str(cha)
 
-# length 길이
+# 원소의 갯수
 length(num)
 
 # 내장형 상수 벡터
@@ -175,13 +189,10 @@ pi
 letters
 month.name
 
-# ex
+# 예시
 month <- c(12,9,3,5,1)
 month
 month.name[month]
-
-
-
 
 
 
@@ -210,8 +221,9 @@ c(1, 2, 3) + c(4, 5, 6, 7, 8)
 v <- pi
 w <- 10/3
 
+# v와 w는 같은건가 물을때
 v==w
-# v = w 아님
+
 v != w
 v > w
 v < w
@@ -237,10 +249,10 @@ y==50
 as.numeric(TRUE)
 as.numeric(FALSE)
 
+# true false는 숫자로 반환가능
 TRUE*TRUE
 TRUE+TRUE
 FALSE*TRUE
-# true false 값 응용
 sum(y > 50)
 # 하나라도 true일 경우 true
 any(-3:3 > 0)
@@ -251,9 +263,9 @@ all(-3:3 > 0)
 sqrt(2)
 # 루트 2^2는 2와 같지 않다
 sqrt(2)^2 == 2
-# 루트 이산차이 무시
+# 미세한 차이 무시
 all.equal(sqrt(2)^2, 2)
-# 값이 왜다른지 설명함
+# 너무 다를경우 왜다른지 설명함
 all.equal(sqrt(2)^2, 3)
 # 그거 무시하고 true false 반환
 isTRUE(all.equal(sqrt(2)^2, 3))
@@ -280,11 +292,6 @@ rm(list=ls())
 
 
 
-
-
-
-
-
 # 벡터 연산
 # 절대값구하기
 abs(-3:3)
@@ -296,22 +303,26 @@ log(1:5, base = exp(1))
 log2(1:5)
 log10(1:5)
 
-# 수학기호들
+# 자연상수 e
 exp(1:5)
 y <- exp(1:5)
 log(y)
 
+# 팩토리얼
 factorial(1:5)
+# 콤비네이션
 choose(5, 2)
 
 sqrt(1:5)
 
+# 기본 지정된 소수점 확인
 options("digits")
 pi
 pi*10
 # 유효자리 수 설정
 signif(456.789, digits = 3)
 
+# 반올림
 round(456.789, digits = 2)
 round(sqrt(1:5), digits = 2)
 round(456.789, digits = -2)
@@ -354,7 +365,6 @@ sum(z)
 prod(z)
 max(z)
 min(z)
-
 mean(z)
 median(z)
 range(z)
@@ -417,8 +427,9 @@ rm(list = ls())
 
 #벡터 인덱싱 원소의 위치
 # 인덱스의 시작은 1이다
+# 모든 원소는 인덱스를 갖고 있다
 num <- 0:30
-
+num
 prime <- c(2,3,5,7,11,13,17,19)
 prime[1]
 
@@ -446,7 +457,7 @@ prime <- c(2,4,5,7,11,14,17,18)
 prime[2] <- 3
 prime[c(6,8)] <- c(13,19)
 prime
-
+# 인덱스로 추가원소 넣기
 prime <- c(2,3,5,7,11,13,17,19)
 length(prime)
 prime[9] <- 23
@@ -458,6 +469,7 @@ prime[15] <- 47
 # 인덱스 논리연산
 prime <- c(2,3,5,7,11,13,17,19)
 prime < 10
+# 논리 연산조건에 대한 값만 반환
 prime[prime<10]
 # 2의 배수만 True 2로 나눠서 나머지가 0인것
 prime %% 2 == 0
@@ -555,7 +567,7 @@ eval.ordered
 table(eval.factor)
 table(eval.ordered)
 
-# 레벨을 범주형 데이터로 변환
+# 레벨을 범주형 데이터로 변환, 레이블스 함수로 변수 데이터 바꾸기
 sex <- c(2,1,2,2,1,0)
 sex.factor <- factor(sex, levels=c(1,2), labels = c("Male", "Female"))
 sex.factor
@@ -575,6 +587,9 @@ food <- factor(c("Vegetables", "Fruits", "Vegetables", "Grains", "Fruits",
 # forcats 라이브러리 및 레벨 위치바꾸기
 library(forcats)
 fct_inorder(food)
+# 빈도별로 정렬
+fct_infreq(food)
+# 레벨 순서 재지정
 fct_relevel(food, "Fruits", "Vegetables","Grains","Proteins","Dairy")
 fct_relevel(food, "Proteins")
 fct_relevel(food, "Proteins" ,after=2)
@@ -584,7 +599,6 @@ fct_relevel(food, "Proteins", after=Inf)
 value <- c(1000, 1500, 1200, 700, 2000,
            2000, 1350, 2500, 15000, 3000)
 food
-
 fct_reorder(food, .x=value)
 # 새 변수값에 의한 정렬(평균에 따른 오름차순 정렬)
 fct_reorder(food, .x=value, .fun=mean)
@@ -613,6 +627,7 @@ matrix(data=v, nrow=3, ncol=4, dimnames=list(rnames, colnames))
 # 인수이름 지정 안하고 가능
 matrix(0, 3, 4)
 ?matrix
+
 
 matrix(NA, 3, 4)
 
@@ -691,6 +706,7 @@ mtx
 t(mtx)
 1:5
 t(1:5)
+# 특정 행 원소 추출
 mtx[2,]
 t(mtx[2,])
 
@@ -773,7 +789,11 @@ ary[,1,2, drop=FALSE]
 # 행과열을 가져오면 R프로그램에 의해 새롭게 열위주로 정렬됨
 ary[2,,]
 
-# 리스트 구조
+
+
+
+
+# 리스트 구조(이것저것 다가능)
 list(0.6826, 0.9544, 0.9974)
 
 list(1.23, "Apple", c(2,3,5,7), matrix(1:6, ncol=3), mean)
@@ -792,7 +812,7 @@ lst
 names(lst) <- c("sigma1", "sigma2", "sigma3")
 lst
 names(lst)
-
+# 원소의 개수
 length(lst)
 
 # 리스트의 결합
@@ -803,6 +823,7 @@ worldcup2
 
 c(worldcup1, worldcup2)
 
+# 리스트는 숫자 벡터로 치환해야 숫자로 인식한다
 a <- list(1,2,3,4,5,6,7)
 a
 mean(a)
@@ -810,7 +831,8 @@ mean(a)
 mean(unlist(a))
 
 # 원소 내 데이터값과 원소 추출의 차이
-
+# 2개 대괄호 <- 자루내 데이터 값 가져옴
+# 1개 대괄호 <- 자루 자체를 갖고옴
 product <- list("A001", "Mouse", 30000)
 product
 
@@ -909,6 +931,7 @@ values <- c(842, 729, 786, 751, 844, 851, 702)
 traffic.death <- list()
 traffic.death
 
+# 빈리스트에 네임즈 변수 넣고 각 원소에 밸류값 할당
 traffic.death[names] <- values
 traffic.death
 
@@ -924,11 +947,15 @@ traffic.death[traffic.death < 750] <- NULL
 traffic.death
 
 
+
+
+
 # 데이터프레임 생성
 
 v1 <- c("A001", "A002", "A003")
 v2 <- c("Mouse", "Keyboard", "USB")
 v3 <- c(30000, 90000, 50000)
+# 데이터프레임의 열은 항상 이름이 있어야함
 data.frame(v1,v2,v3)
 #행으로 벡터이름 지정하기
 data.frame(row.names=v1,v2,v3)
@@ -938,7 +965,7 @@ data.frame(id=v1, name=v2, price=v3)
 product <- data.frame(id=v1, name=v2, price=v3)
 product
 
-# 팩터로 취급 안하기..?
+# 팩터로 취급 안하기..? 데이터프레임은 벡터를 자동으로 팩터로 지정
 str(product)
 product <- data.frame(id=v1, name=v2, price=v3, stringsAsFactors = FALSE)
 str(product)
@@ -971,6 +998,9 @@ ncol(product)
 length(product)
 
 rm(list = ls())
+
+
+
 # 데이터프레임 확장하기
 id <- c("A001","A002","A003")
 name <- c("Mouse", "Keyboard", "USB")
@@ -1004,7 +1034,7 @@ product$madein <- c("Korea", "China", "China", "Korea",
                     "Korea", "USA")
 product
 
-# 데이터 프레임으로 행추가하기
+# 데이터 프레임으로 열추가하기
 
 new.cols <- data.frame(manufacturer=c("Logitech", "Logitech", "Samsung",
                                       "Samsung", "Samsung", "Intel"),
@@ -1013,10 +1043,10 @@ new.cols
 product <- cbind(product, new.cols)
 product
 
+# cbind함수는 열의 이름을 이용해서 그대로 붙힌다
 cols1 <- data.frame(x=c("a", "b", "c"),
                     y=c(1,2,3))
 
-# cbind함수는 열의 이름을 이용해서 그대로 붙힌다
 cols2 <- data.frame(x=c("alpha", "beta", "gamma"),
                     y=c(100,200,300))
 cbind(cols1, cols2)
@@ -1094,8 +1124,6 @@ states
 
 row.names(states) <- NULL
 head(states)
-
-rm(list=ls())
 
 # 특정 조건에 따른 원소들 추출
 rich.states <- states[states$Income > 5000, c("Name", "Income")]
@@ -1189,6 +1217,7 @@ plot(Sepal.Length, Sepal.Width)
 rm(list = ls())
 
 
+
 # 인덱싱 편하게하기
 head(mtcars)
 
@@ -1273,3 +1302,338 @@ class(Batting.tbl)
 Batting.df <- as.data.frame(Batting.tbl)
 class(Batting.df)
 
+# 텍스트
+# 텍스트 갯수세기
+x <- "We have a dream"
+x
+nchar(x)
+length(x)
+y <- c("we", "have", "a", "dream")
+y
+nchar(y)
+length(y)
+nchar(y[4])
+letters
+sort(letters, decreasing=TRUE)
+
+fox.says <- "It is only with the HEART that one can See Rightly"
+fox.said <- "what is essential is invisible to the eye"
+p1 <- "You come at four in the afternoon, then at three I shall begin to be happy"
+p2 <- "One runs the risk of weeping a little, if one lets himself be tamed"
+p3 <- "What makes the desert beautiful is that somewhere it hides a well"
+fox.said <- "WHAT IS ESSENTIAL is invisible to the Eye"
+txt <- "Data Analytics is useful. Data Analytics is also interesting."
+words <- c("at", "bat", "cat", "chaenomeles", "chase", "chasse", 
+           "cheap", "check", "cheese",  "chick", "hat")
+words2 <- c("12 Dec", "OK", "http://", "<TITLE>Time?</TITLE>", "12345", "Hi there" )
+
+
+tolower(fox.says)
+toupper((fox.says))
+
+#  텍스트 분리 결합
+fox.said <- "What is essential is invisible to the eye"
+strsplit(fox.said, split="")
+strsplit(fox.said, split=" ")
+
+# 분리텍스트 벡터화 및 인덱스로 내용추출
+fox.said.words <- unlist(strsplit(fox.said, split=" "))
+fox.said.words
+unlist(strsplit(fox.said, split=" "))[[3]]
+
+
+# 텍스트백터 합치기
+
+p1 <- "You come at four in the afternoon, then at three I shall begin to be happy"
+p2 <- "One runs the risk of weeping a little, if one lets himself be tamed"
+p3 <- "What makes the desert beautiful is that somewhere it hides a well"
+
+# 원소안에 원소 들어가기 및 추출
+littleprince <- c(p1, p2, p3)
+littleprince
+strsplit(littleprince, " ")
+strsplit(littleprince, " ")[[3]]
+strsplit(littleprince, " ")[[3]][5]
+
+# 중복되지 않는 함수 추출하기 
+fox.said <- "WHAT IS ESSENTIAL is invisible to the Eye"
+fox.said.words <- strsplit(fox.said, " ")[[1]]
+unique(fox.said.words)
+unique(tolower(fox.said.words))
+
+# 텍스트 결합(한개의 벡터로)
+
+paste("Everybody", "wants", "to", "fly")
+
+# 이경우엔 안됨
+paste(c("Everybody", "wants", "to", "fly"))
+
+fox.said.words
+paste(fox.said.words)
+
+paste("Everybody", "wants", "to", "fly", sep="-")
+paste("Everybody", "wants", "to", "fly", sep="")
+paste0("Everybody", "wants", "to", "fly")
+# 숫자와 문자결합
+paste(p1, sqrt(p1))
+paste("25 degres celsisius is", 25*1.8 +32, "degree Fahert")
+
+heroes <- c("Batman", "Captain America", "Hulk")
+colors <- c("Black", "Blue", "Green")
+paste(heroes, colors)
+
+# 페이스트함수 응용
+paste("Type", 1:5)
+paste(heroes, "watns", "to", "fly")
+
+# 공백주면서 합치기
+paste(c("Everybody", "wants", "to", "fly"), collapse = " ")
+paste(heroes, "wants", "to", "fly", collapse=", and ")
+
+paste(heroes, "wants", "to", "fly", sep = "-", collapse = ";")
+
+paste(month.abb, 1:12)
+paste(month.abb, 1:12, sep = "_")
+paste(month.abb, 1:12, sep = "_", collapse = "-")
+
+# 가능한 순서쌍의 곱 구하기(행렬형식)
+outer(c(1,2,3), c(1,2,3))
+
+asian.countries <- c("Korea", "Japan", "China")
+info <- c("GDP", "Population", "Area")
+outer(asian.countries, info, FUN = paste, sep="-")
+
+# 벡터로 바꾸기
+out <- outer(asian.countries, info, FUN = paste, sep="-")
+as.vector(out)
+
+outer(asian.countries, asian.countries, FUN=paste, sep="-")
+x <- outer(asian.countries, asian.countries, FUN=paste, sep="-")
+# 중복되지 않는 순서쌍 구하기
+x[!lower.tri(x)]
+
+# 변수써서 문장 출력
+customer <- "Jobs"
+buysize <- 10
+deliveryday <- 3
+paste("Hello", customer, ", your order of ", buysize, "product(s) will be dilivered within ", deliveryday, " day(s).", sep=" ")
+
+sprintf("Hello %s  your order of %s product(s) will be dilivered within %s day(s).", customer, buysize, deliveryday)
+
+customer <- c("Jobs", "Gates", "Bezos")
+buysize <- c(10,7,12)
+deliveryday <- c(3,2,7.5)
+# 소수점출력
+sprintf("Hello %s  your order of %s product(s) will be dilivered within %.1f day(s).", customer, buysize, deliveryday)
+
+# 부분문자열 추출
+substr("Data Analytics", start=1, stop = 4)
+
+substring("Data Analytics", 6)
+
+class <- c("Data Analytics", "Data Mining", "Data Visualization")
+substr(class, 1, 4)
+
+countries <- c("Korea, KR", "Unites State, US", "China, CN")
+substr(countries, nchar(countries)-1, )
+
+# 특정 문자열 포함 추출
+head(islands)
+landmasses <- names(islands)
+landmasses
+# 위치가 반환됨(인덱스값)
+grep(pattern = "New", x=landmasses)
+index <- grep(pattern = "New", x=landmasses)
+landmasses[index]
+# 값 반환
+grep(pattern = "New", x=landmasses, value=TRUE)
+landmasses[grep(" ", landmasses)]
+grep(" ", landmasses, value=TRUE)
+
+# 일치 첫 문자열 추출 및 치환
+txt <- "Data Analytics is useful. Data Analytics is also interesting."
+sub(pattern = "Data", replacement = "Business", x = txt)
+# 일치 모든 문자열 추출 및 치환
+gsub(pattern = "Data", replacement = "Business", x = txt)
+x <- c("product.csv", "customer.csv", "supplier.csv")
+gsub(".csv", "", x)
+
+# 정규 표현식
+words <- c("at", "bat", "cat", "chaenomeles", "chase", "chasse", 
+           "cheap", "check", "cheese",  "chick", "hat")
+grep("che", words, value=TRUE)
+grep("at", words, value = TRUE)
+# 문자 대괄호 a 또는 t에 해당되는 모든것 반환
+grep("[at]", words, value=TRUE)
+# ch 또는 at
+grep("ch|at", words,value = TRUE)
+# 패턴 줘서 찾기
+grep("ch(e|i)ck", words, value=TRUE)
+# s가 있어도 되고 없어도 될경우 찾기
+grep("chas?e", words, value = TRUE)
+# s가 0회 이상 모두
+grep("chas*e", words, value = TRUE) 
+# s가 1회 이상 모두
+grep("chas+e", words, value = TRUE)
+# a가 한번이상 반복, e가 한번이상 반복, 없어도 되는 패턴
+grep("ch(a*|e*)se", words, value = TRUE)
+# c로 시작
+grep("^c", words, value = TRUE)
+# t로 끝나는 단어
+grep("t$", words, value = TRUE)
+# c로 시작하고 중간에 아무문자 들어온다음 t로 끝나는게 0회이상
+grep("^c.*t$", words, value = TRUE)
+# h또는 c로 시작하는게 0또는 1회에 끝날때 at인것
+grep("^[hc]?at", words, value = TRUE)
+
+# 문자와 숫자조합 찾기
+words2 <- c("12 Dec", "OK", "http://", "<TITLE>Time?</TITLE>", "12345", "Hi there" )
+grep("[[:alnum:]]", words2, value = TRUE)
+# 문자가 있는 벡터 찾기
+grep("[[:alpha:]]", words2, value = TRUE)
+# 숫자가 있는 벡터 찾기
+grep("[[:digit:]]", words2, value = TRUE)
+# 문장부호 포함 벡터 찾기
+grep("[[:punct:]]", words2, value = TRUE)
+# 공백 포함벡터 찾기
+grep("[[:space:]]", words2, value = TRUE)
+
+# 백슬래쉬 사용
+# 숫자 문자 포함
+grep("\\w+", words2, value = TRUE)
+# 숫자
+grep("\\d+", words2, value = TRUE)
+# 공간
+grep("\\s+", words2, value = TRUE)
+
+
+
+
+# 정규표현식 패턴검출
+string <- c("data analytics is useful",
+            "business analytics is helpful",
+            "visualization of data is interesting for data scientists")
+
+grep(pattern = "data", x = string)
+string[grep(pattern = "data", x=string)]
+# 또는
+grep("useful|helpful", string, value = TRUE)
+# 매칭시 true false 반환
+grepl(pattern = "data", x=string)
+# 매칭값 갯수 찾기
+state.name
+sum(grepl("new", state.name, ignore.case = TRUE))
+
+# 첫 매칭이 이뤄진 위치정보 벡터값으로 표시
+regexpr(pattern = "data", text = string)
+# 모든 매칭이 이뤄진 위치정보 벡터값으로 표시
+gregexpr(pattern = "data", text = string)
+# 첫 매칭데이터 추출
+regmatches(x=string, m=regexpr("data", string))
+# 모든 매칭데이터 추출
+regmatches(x=string, m=gregexpr("data", string))
+# 데이터 문자열 제외한 반대 결과 추출
+regmatches(x=string, m=gregexpr("data", string), invert = TRUE)
+
+# 매칭된 첫 특정문자열 치환
+sub(pattern = "data", replacement = "text", x = string)
+gsub(pattern = "data", replacement = "text", x = string)
+
+# 문자 나누기
+strsplit(x = string, split = " ")
+# 벡터형식으로 나눈문자 보기
+unlist(strsplit(x = string, split = " "))
+
+
+
+# stingr 패키지 - base 패키지에 비해 인수 표현이 같다는점이 좋다
+string <- c("data analytics is useful",
+            "business analytics is helpful",
+            "visualization of data is interesting for data scientists")
+
+library(stringr)
+# true false 매칭 논리값 반환(grepl과 비슷)
+str_detect(string=string, pattern="data")
+# 대소문자 안가리고 찾기
+str_detect(string, "DATA")
+str_detect(string, fixed("DATA", ignore_case = TRUE))
+# 있는 그대로 찾기
+str_detect(c("abz", "ayz", "a.z"), "a.z")
+str_detect(c("abz", "ayz", "a.z"), fixed("a.z"))
+# 같은내용
+str_detect(c("abz", "ayz", "a.z"), "a\\.z")
+
+# 첫 매칭 현황 리스트형으로 추출(=regexpr)
+str_locate(string, "data")
+# 모든 매칭 현황 리스트형으로 추출(=gregexpr)
+str_locate_all(string, "data")
+
+# 문자열추출(=regmatches)
+str_extract(string, "data")
+str_extract_all(string, "data")
+# 행렬로 추출
+str_extract_all(string, "data", simplify = TRUE)
+# 벡터로 추출
+unlist(str_extract_all(string, "data"))
+
+# 인수의 그룹별 매칭 문자열 추출
+sentences5 <- sentences[1:5]
+# 관사 a the 가 나오고 공간하나에 단어가 출현하는 문자열 추출
+str_extract(sentences5, "(a|A|the|The) (\\w+)")
+# 각 원소에 대한 모든 a the 가 붙은거 문자열 추출 및 정보 행렬 
+str_match(sentences5, "(a|A|the|The) (\\w+)")
+str_match_all(sentences5, "(a|A|the|The) (\\w+)")
+
+# 매칭된 문자 치환(=sub, gsub)
+str_replace(string = string, pattern = "data", replacement = "text")
+str_replace_all(string = string, pattern = "data", replacement = "text")
+
+# 매칭된 문자 나누기(=strsplit)
+str_split(string, " ")
+# 벡터로 나오게
+unlist(str_split(string, " "))
+# 중복되지 않은 단어만 추출
+unique(unlist(str_split(string, " ")))
+# 원소 갯수 정하기
+str_split(string, " ", n=3)
+# 행렬로 보기
+str_split(string, " ", simplify = TRUE)
+
+# 문자 개수 출력
+str_length(string)
+# 특정 문자 개수 출력
+str_count(string, "data")
+# 단어 갯수 출력
+str_count(string, "\\w+")
+
+# 문자열 길이 맞추기(공백으로 채움움)
+str_pad(string=c("a", "abc", "abcde"), width=6, side = "left", pad=" ")
+
+mon <- 1:12
+mon
+str_pad(mon, width = 2, side = "left", pad="0")
+
+# 공백 제거
+str_trim()
+# 가장 큰 string 의 문장 길이에 맞춰서 공백채우기
+str.pad <- str_pad(string, width = max(str_length(string)), side = "both", pad = " ")
+str.pad
+str_trim(str.pad, side = "both")
+str.pad
+
+# 문자 결합
+str_c("data", "mining", sep = " ")
+str.mining <- str_c(c("data mining", "text mining", "is useful", sep=" "))
+str.mining
+str_c(str.mining, collapse = "; ")
+# 엔터쳐서 구분하기
+str_c(str.mining, collapse = "\n")
+cat(str_c(str.mining, collapse = "\n"))
+
+# 문자열 일부 추출
+str_sub(string = str.mining, start=1, end=4)
+str_sub(str.mining, 5, 5) <- "-"
+str.mining
+# 음수로 끝자리부터 카운팅
+str_sub("abcdefg", start = -2)
+str_sub("abcdefg", end = -3)
