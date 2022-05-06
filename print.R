@@ -1637,3 +1637,699 @@ str.mining
 # 음수로 끝자리부터 카운팅
 str_sub("abcdefg", start = -2)
 str_sub("abcdefg", end = -3)
+
+
+# 날짜
+
+date()
+# 날짜 서식으로 변환
+as.Date("2025-12-31")
+as.Date("2025/12/31")
+as.Date("12/31/2025", format("%m/%d/%Y"))
+?strptime
+
+d <- as.Date("2025-12-31")
+d
+format(d, format="%m/%d/%Y")
+
+# 날짜 포맷 바꾸기
+today <- Sys.Date()
+today
+format(today, format="%Y/%m/%d")
+format(today, format="%Y/%m/%d %A")
+format(today, format="%Y/%m/%d %a")
+
+# 날짜 계산하기
+
+d <- as.Date("2025-12-31")
+d
+weekdays(d)
+d
+d+7
+d+ 1:7
+
+# 요일 뽑기
+weekdays(d +1:7)
+
+# 연속날짜 벡터추출
+start <- as.Date("2025-01-01")
+end <- as.Date("2025-01-31")
+seq(from=start, to=end, by=1)
+seq(from=start, by=1, length.out=7)
+# 간격을 주고 연속으로 추출
+seq(from=start, by="7 days", length.out=7)
+seq(from=start, by="month", length.out=12)
+
+
+# 월하고 분기 추출
+start <- as.Date("2025-01-01")
+qrt <- seq(from=start, by="3 month", length.out=4)
+months(qrt)
+quarters(qrt)
+
+# 로케일, 컴퓨터상의 로컬환경에 변경에 따른 변수변경
+Sys.getlocale()
+Sys.setlocale("LC_TIME", "C")
+months(qrt)
+Sys.setlocale("LC_TIME", "Korean_Korea.949")
+months(qrt)
+# 로케일 기본값 짧게 설정하는법
+Sys.setlocale()
+
+# POSIX날짜
+pct <- as.POSIXct("2025/03/15, 15:03:04", format="%Y/%m/%d, %H:%M:%S")
+class(pct)
+as.integer(pct)
+# posixlt(리스트형 날짜)
+plt <- as.POSIXlt("2025/03/15, 15:03:04", format="%Y/%m/%d, %H:%M:%S")
+class(plt)
+unclass(plt)
+plt$mday
+plt$mon
+plt$year
+plt$wday
+plt$hour
+
+# 요일 추출하기
+dposix<- as.Date("2025-12-31")
+dposix
+as.POSIXlt(dposix)$wday
+
+# 포식스만드는 다른 함수
+strptime("2025-12-31", format="%Y-%m-%d")
+class(strptime("2025-12-31", format="%Y-%m-%d"))
+strptime("2025-12-31", format="%Y-%m-%d")$year+1900
+
+# 날짜 시간정보 변수에에 저장및 사용
+moon <- as.POSIXct("1969/07/20, 20:17:39", format="%Y/%m/%d, %H:%M:%S", tz="UTC")
+moon
+format(moon, "The time of the Apollo moon landing was %Y/%m/%d, at %H:%M:%S")
+
+# posix 개체 다른 형식함수
+y <- 2020
+m <- 12
+d <- 31
+ISOdate(y, m, d)
+class(ISOdate(y, m, d))
+as.Date(ISOdate(y, m, d))
+# 변수사용해서 만들기
+years <- c(2025, 2026, 2027, 2028)
+months <- c(1,4,7,10)
+days <- c(12,19,25,17)
+ISOdate(years, months, days)
+
+# 변수사용해서 날짜 클래스 바꾸기
+jdate <- as.Date("2025-12-31")
+jdate
+as.integer(jdate)
+julian(jdate)
+as.integer(as.Date("1970-01-01"))
+as.integer(as.Date("1969-12-31"))
+
+as.Date(as.integer(jdate), origin="1970-01-01")
+
+# posix 날짜에 시간더하기
+moon
+class(moon)
+moon + 60*60*2
+moon + 60*60*24*7
+
+as.Date(moon) + 7
+
+# 특정일간 차이 구하기
+start <- as.Date("1988-09-17")
+end <- as.Date("2018-02-09")
+start
+end
+end - start
+
+# 날짜 차이 구하는 함수
+today <- Sys.date()
+Dooly <- as.Date("1983-04-22")
+difftime(today, Dooly, units="days")
+
+# 날짜 사이 부등식
+moon
+Sys.time() > moon
+Sys.Date() > as.Date(moon)
+
+
+
+
+# lubridate 패키지
+library(lubridate)
+
+# 날짜 뽑기
+today()
+now()
+
+# 텍스트데이터에서 날짜뽑기
+"2030-03-15"
+ymd("2030-03-15")
+"03/15/2030"
+mdy("03/15/2030")
+"15032030"
+dmy("15032030")
+ymd("300315")
+ymd("2030년 3월 15일")
+mdy("3월 15일, 2030년")
+dmy("15-March-2030")
+
+# 안될경우 및 로케일 수정으로 오류 고침
+mdy("March 15th, 2030")
+
+Sys.setlocale("LC_TIME", "C")
+mdy("March 15th, 2030")
+Sys.setlocale()
+
+ymd(20300315)
+
+# 시간정보 포함 날짜정보 생성
+ymd_hms("2030-03-15 23:11:59")
+ymd_hm("2030-03-15 23:11")
+ymd_h("2030-03-15 23")
+
+# 여러 원소로 날짜정보 생성
+years <- c(2030, 2031,2032,2033)
+months <- c(1,4,7,10)
+days <- c(12,19,25,17)
+hours <- c(3,7,11,20)
+mins <- c(5,12,33,39)
+secs <- c(15,5,27,55)
+
+data.frame(years,months,days,hours,mins,secs)
+
+dt <- data.frame(years,months,days,hours,mins,secs)
+dt
+
+make_date(year=dt$years, month=dt$months, day=dt$days)
+make_datetime(year=dt$years, month=dt$months, day=dt$days, hour=dt$hours, min=dt$mins , sec=dt$secs)
+
+# 날짜에 시간정보 넣고 빼기
+ymd("2030-03-15")
+as_datetime(ymd("2030-03-15"))
+ymd_hms("2030-03-15 23:11:59")
+as_date(ymd_hms("2030-03-15 23:11:59"))
+
+# 날짜에서 특정정보 추출
+datetime <- ymd_hms("1969/07/20, 20:17:39")
+year(datetime)
+month(datetime)
+mday(datetime)
+hour(datetime)
+minute(datetime)
+second(datetime)
+# 그 해에 경과된 일수
+yday(datetime)
+# 요일 정수반환
+wday(datetime)
+
+# 요일순서 추출
+Sys.setlocale("LC_TIME", "C")
+month(datetime, label=TRUE)
+wday(datetime, label=TRUE, abbr=FALSE)
+Sys.setlocale()
+month(datetime, label=TRUE)
+wday(datetime, label=TRUE)
+
+# 날짜에 특정일 수정하기
+datetime
+year(datetime) <- 2030
+datetime
+month(datetime) <- 8
+datetime
+
+update(datetime, year=2031, month=8, hour=11)
+update(datetime, yday=1)
+
+# 상하반기, 분기, 오전오후,
+datetime <- ymd_hms("1969/07/20, 20:17:39")
+datetime
+semester(datetime)
+quarter(datatime)
+am(datetime)
+pm(datetime)
+
+# 시간단위 반올림 반내림, 올림, 내림
+round_date(datetime, unit="year")
+floor_date(datetime)
+ceiling_date(datetime)
+
+# 날짜함수 표시(벡터)
+years(1)
+months(3)
+days(7)
+weeks(2)
+
+hours(c(12,24))
+minutes(1:5)
+seconds(seq(0, 10, by=2))
+
+# 날짜 사칙연산
+10*(months(6)+days(2))
+moon <- ymd("1969/07/20")
+moon + days(10000)
+moon + months(1000)
+moon - years(100)
+
+mars <- ymd("2021/02/18")
+mars
+mars - moon
+
+# interval 함수 일자말고 우리가 읽는 연월일 차이로 계산
+interval(moon, mars)
+class(interval(moon, mars))
+moon %--% mars
+as.period(moon %--% mars)
+# 초단위
+as.duration(moon %--% mars)
+
+class(as.duration(moon %--% mars))
+
+# 초단위 변환
+dyears(1)
+dweeks(1)
+dhours(1)
+
+2* dyears(1)
+dyears(1) + dweeks(4) +dhours(2)
+
+# 함수에따라 초가 있냐없냐 생김
+ymd("2029-01-01") + years(1)
+ymd("2029-01-01") + dyears(1)
+
+leap_year(2029)
+leap_year(2028)
+
+years(1)/days(1)
+(ymd("2028-01-01") %--% ymd("2029-01-01"))/ddays(1)
+
+# 사용대 시간 확인
+Sys.timezone()
+
+OlsonNames()
+
+# 함수별로 나라 시간대 확인하고 가공해보기
+kst <- ymd_hm("2030-03-15 15:30", tz="Asia/Seoul")
+kst
+
+utc <- ymd_hm("2030-03-15 15:30")
+utc
+
+kst - utc
+
+ny <- ymd_hms("2030-01-01 00:00:00", tz="America/New_york")
+ny
+with_tz(ny, tzone = "Asia/Seoul")
+
+
+
+# 파일 import
+
+setwd("F:/MyWorkspaceR/Intro-R_Example_Files1")
+read.csv(file="product.csv")
+
+read.csv("product-with-no-header.csv", header=FALSE)
+
+read.table(file="product.txt")
+
+read.table("product.txt", header=TRUE)
+
+read.table("product-colon.txt", sep=":", header=TRUE)
+
+read.table("product-missing.txt", header=TRUE)
+read.table("product-missing.txt", header=TRUE, na.strings=".")
+
+read.table("product-comment.txt", header=TRUE)
+
+brand.eval <- read.table("brand-eval.csv", header=TRUE, 
+                         row.names="BrandID", sep=",")
+brand.eval
+str(brand.eval)
+
+brand.eval <- read.table("brand-eval.csv", header=TRUE, 
+                         row.names="BrandID", sep=",", 
+                         colClasses=c("character", "character", 
+                                      "numeric", "numeric", "numeric"))
+brand.eval
+str(brand.eval)
+
+read.fwf(file="product-fwf.txt", widths=c(4,-1,10,8))
+
+read.fwf("product-fwf.txt", widths=c(4,-1,10,8), col.names=c("id", "name", "price"))
+
+readLines(con="won-dollar.txt")
+
+paste(readLines(con="won-dollar.txt"), collapse=" ")
+
+readLines("won-dollar.txt", n=2)
+
+scan(file="won-dollar.txt", what=character())
+
+scan("won-dollar.txt", what=list(character(), numeric(), numeric()))
+
+scan("won-dollar.txt", 
+     what=list(date=character(), buy=numeric(), sell=numeric()))
+
+scan("won-dollar.txt", 
+     what=list(date=character(), buy=numeric(), sell=numeric()),
+     nlines=2)
+scan("won-dollar.txt",
+     what=list(date=character(), buy=numeric(), sell=numeric()),
+     skip=3)
+
+library(readxl)
+read_excel(path="product.xlsx", sheet=1)
+
+library(openxlsx)
+read.xlsx(xlsxFile="product.xlsx", sheet=1)
+
+# 출력
+
+pi
+sqrt(3)
+print(pi)
+print(sqrt(3))
+
+print(matrix(c(1,2,3,4), ncol=2))
+print(list("Batman", "Spider", "Ironman"))
+
+print("The square root of 3 is", sqrt(3), ".")
+cat("The square root of 3 is", sqrt(3), ".")
+cat("The square root of 3 is", sqrt(3), "\b.", "\n")
+
+name <- "Jenny"
+cat("Hello", name, "\b.\n", "Isn\'t it", "\t", "A LOVELY DAY?", "\n")
+
+hero <- list("Batman", "Spider", "Ironman")
+cat(hero)
+cat(unlist(hero))
+
+pi
+pi*100
+pi/100
+
+print(pi, digits=3)
+
+pnorm(-3:3)
+print(pnorm(-3:3), digits=3)
+
+z <- c(0, 1.64, 1.96, 2.58)
+ptbl <- data.frame(Z=z, Lower=pnorm(-z), Upper=pnorm(z))
+ptbl
+print(ptbl, digits=3)
+
+prime <- c(2,3,5,7,11,13,17,19)
+cat(prime, file="prime.txt", sep="\t", "\n")
+
+id <- c("A001", "A002", "A003")
+name <- c("Mouse", "Keyboard", "USB")
+price <- c(30000, 90000, 50000)
+cat(id, file="product-cat.txt", sep="\t", "\n")
+cat(name, file="product-cat.txt", sep="\t", append=TRUE, "\n")
+cat(price, file="product-cat.txt", sep="\t", append=TRUE, "\n")
+
+con <- file("product-cat2.txt", open = "w")
+cat(id, file=con, sep = "\t","\n")
+cat(name, file=con, sep = "\t","\n")
+cat(price, file=con, sep = "\t","\n")
+close(con)
+
+
+fah <- readline("Fahrenheit? ")
+fah <- as.numeric(fah)
+print(paste("Fahrenheit =", fah))
+cel <- (fah-32)/1.8
+print(paste("Celsius =", cel))
+
+sink("Fahrenheit-output.txt")
+fah <- readline("Fahrenheit? ")
+fah <- as.numeric(fah)
+print(paste("Fahrenheit =", fah))
+cel <- (fah-32)/1.8
+print(paste("Celsius =", cel))
+sink()
+
+
+head(Orange)
+write.csv(x=Orange, file="orange.csv")
+write.csv(x=Orange, file="orange.csv", row.names=FALSE)
+
+write.table(x=Orange, file="Orange.txt", sep=";", row.names = FALSE)
+
+rm(list=ls())
+ls()
+
+
+z <- c(0, 1.64, 1.96, 2.58)
+ptbl <- data.frame(Z=z, Lower=pnorm(-z), Upper=pnorm(z))
+ptbl
+
+save(ptbl, file="ptbl.RData")
+rm(ptbl)
+ptbl
+ls()
+load("ptbl.RData")
+
+list.files()
+list.files(recursive=TRUE)
+list.files(all.files=TRUE)
+list.files(pattern="*.txt")
+list.dirs()
+list.files(path="./examples")
+
+file.create("temp.txt")
+file.exists("temp.txt")
+file.remove("temp.txt")
+
+
+# 파일 R내에서 더블클릭하듯이 실행하기
+openFileInOS("product.csv")
+
+
+# read함수
+library(pander)
+library(readr)
+read_csv(file="product.csv")
+read_csv(file="product-with-no-header.csv", col_names=c("id","name","price"))
+
+
+read_csv(file="product-missing.csv", na=".")
+
+read_csv(file = "product-comment.csv", skip=1)
+
+read_delim(file="product.txt", delim = " ")
+read_delim(file="product-with-no-header.csv", delim=",", col_names=c("id","name","price"))
+
+fwf_empty()
+fwf_widths()
+fwf_positions()
+fwf_cols()
+
+read_fwf(file="product-fwf.txt", col_positions = fwf_empty(file="product-fwf.txt", col_names = c("id","name","price")))
+
+read_fwf(file="product-fwf.txt", col_positions = fwf_widths(widths=c(5,10,8), col_names = c("id","name","price")))
+
+read_fwf(file="product-fwf.txt", col_positions = fwf_positions(start=c(1, 6, 16), end=c(5, 15, 23)))
+
+read_fwf(file="product-fwf.txt", col_positions = fwf_cols(name=c(6, 15), price=c(16,23)))
+
+read_table(file = "product-fwf.txt", col_names=c("id","name","price") )
+
+read_table(file="product.txt",col_names=c("id","name","price"))
+
+read_lines(file = "won-dollar.txt")
+read_lines(file = "won-dollar.txt", skip=1, n_max = 3)
+read_file(file = "won-dollar.txt")
+
+Orange
+write_csv(x=Orange, file= "orange.csv")
+read_csv(file= "orange.csv")
+
+write_delim(x=Orange, file="orange.txt", delim=";")
+read_delim(file="orange.txt", delim=";")
+
+write_lines(x=Orange$circumference, file="c.txt")
+read_lines("c.txt")
+
+parse_number("$100")
+class(parse_number("$100"))
+parse_number("30%")
+parse_number("61.3kg")
+parse_number("Salary per year: $250,000")
+
+
+
+
+
+# 초기값
+
+transLength <- function(x){
+  tlength <- round(x*0.9144, digits=1)
+  result <- paste(tlength, "m", sep="")
+ return(result)
+}
+rm(list = ls())
+
+y <- c(100,150,200)
+transLength(y)
+
+trans2 <- transLength
+trans2
+trans2(y)
+
+transLength <- function(x){
+  tlength <- round(x*0.9144, digits=1)
+  result <- paste(tlength, "m", sep="")
+ 
+}
+
+transLength(y)
+print(transLength(y))
+
+transLength <- function(x){
+  tlength <- round(x*0.9144, digits=1)
+  paste(tlength, "m", sep="")
+  
+}
+transLength(y)
+transLength <- function(x){
+  if(!is.numeric(x)) return("Not a Number")
+  tlength <- round(x*0.9144, digits=1)
+  paste(tlength, "m", sep="")
+  
+}
+transLength("ABC")
+
+f1 <- function(x,y) {x+y}
+f2 <- function(x,y) x+y
+f1(1,2)
+f2(1,3)
+
+transLength <- function(x) paste(round(x*0.9144, digits=1), "m", sep="")
+transLength(y)
+
+transLength <- function(x, mult, unit){
+  tlength <- round(x*mult, digits=1)
+  paste(tlength, unit, sep="")
+}
+
+transLength(y, mult=3, unit="ft")
+transLength(y, mult=36, unit="in")
+
+transLength(y)
+
+transLength <- function(x, mult=0.9144, unit="m"){
+  tlength <- round(x*mult, digits=1)
+  paste(tlength, unit, sep="")
+}
+
+transLength(y)
+
+transLength(y, mult=3, unit = "ft")
+transLength(y, 3, "ft")
+
+transLength <- function(x, mult=0.9144, unit="m", ...){
+  tlength <- round(x*mult, ...)
+  paste(tlength, unit, sep="")
+}
+
+transLength(y, digits=2)
+
+transLength(y)
+
+transLength <- function(x, mult=0.9144, unit="m", digits=1){
+  tlength <- round(x*mult, digits=digits)
+  paste(tlength, unit, sep="")
+}
+
+transLength(y)
+
+transLength <- function(x, mult=0.9144, unit="m", FUN=round, ...){
+  tlength <- FUN(x*mult, ...)
+  paste(tlength, unit, sep="")
+}
+
+transLength(y)
+
+ls()
+
+x <- 11:15
+scopetest <- function(x){
+  cat("This is x: ", x, "\n")
+  rm(x)
+  cat("This is x after removing x", x, "\n")
+}
+
+scopetest(x=15:11)
+
+
+
+
+
+# 논리흐름 제어
+
+x <- pi
+y <- 3
+if (x>y) x
+if (x < y) x
+
+if (x < y) x else y
+
+x <- pi
+y <-1:5
+if (x<y) x else y
+if (x>y) x else y
+
+test <- c(TRUE, FALSE, TRUE, TRUE, FALSE)
+yes <- 1:5
+no <- 0
+ifelse(test, yes, no)
+
+ifelse (x>y,x , y)
+
+center <- function(x,type){
+  switch(type,
+         mean=mean(x),
+         median=median(x),
+         trimmed=mean(x, trim=0.1)
+         )
+}
+x <- c(2,3,5,7,11,13,17,23,29)
+center(x, "mean")
+center(x, "median")
+center(x, "trimmed")
+
+center <- function(x,type){
+  switch(type,
+         mean=mean(x),
+         median=median(x),
+         trimmed=mean(x, trim=0.1),
+         "Choose one of mean, median, and trimmed"
+  )
+}
+center(x, "other")
+center(x, "trimmed")
+
+
+repeat print("hello")
+
+i <- 5
+repeat {if(i > 25) break
+  else {print(i)
+    i <- i+5}
+}
+
+i <- 5
+while (i <=25) {
+  print(i)
+  i <- i+5
+}
+
+for (var in list) statement
+
+for (i in seq(from=5, to=25, by=5)) print(i)
+for (i in seq(from=5, to=25, by=5)) print(i)
+
+i <- 1
+for (i in seq(from=5, to=25, by=5)) print(i)
