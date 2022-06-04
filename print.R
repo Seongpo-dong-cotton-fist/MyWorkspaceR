@@ -2442,3 +2442,217 @@ as.list(dfm)
 as.list(dfm2)
 as.matrix(dfm)
 as.matrix(dfm2)
+
+# 행, 열결합, merge
+#finance.yahoo.com: samsung Electonics, KRW
+options("install.lock"=FALSE)
+install.packages('quantmod')
+library(quantmod)
+sec <- getSymbols(Symbols="005930.KS", 
+                  from="2021-10-01",
+                  to="2021-12-31",
+                  auto.assign = FALSE)
+sec <- as.data.frame(sec)
+str(sec)
+head(sec[c("005930.KS.Close", "005930.KS.Volume")])
+
+sec <- cbind(date=rownames(sec),symbol="005930.KS",sec[c("005930.KS.Close", "005930.KS.Volume")])
+rownames(sec) <- NULL
+colnames(sec)[c(3,4)] <- c("close", "volume")
+head(sec)
+
+hmc <- getSymbols(Symbols="005387.KS", 
+                  from="2021-10-01",
+                  to="2021-12-31",
+                  auto.assign = FALSE)
+hmc <- as.data.frame(hmc)
+str(hmc)
+head(hmc[c("005387.KS.Close", "005387.KS.Volume")])
+
+hmc <- cbind(date=rownames(hmc),symbol="005387.KS",hmc[c("005387.KS.Close", "005387.KS.Volume")])
+rownames(hmc) <- NULL
+colnames(hmc)[c(3,4)] <- c("close", "volume")
+head(hmc)
+stock <- rbind(sec,hmc)
+stock
+
+#merge
+fx <- getSymbols(Symbols="KRW=X", 
+                  from="2021-10-01",
+                  to="2021-12-31",
+                  auto.assign = FALSE)
+fx <- as.data.frame(fx)
+str(fx)
+head(fx[c("KRW=X.Close")])
+fx <- cbind(date=rownames(fx),fx[c("KRW=X.Close")])
+rownames(fx) <- NULL
+colnames(fx)[c(2)] <- c("close")
+head(fx)
+
+
+intersect(names(sec), names(fx))
+
+report <- merge(sec,fx,by="date")
+report
+
+v <- c(10,9,8,7,6,5,4,3,2,1)
+match(7, v)
+match(c(11,5,3,1,0),v)
+
+head(mtcars)
+car <- mtcars
+car$name <- rownames(car)
+car
+rownames(car) <- NULL
+head(car)
+
+highhp.car <- car[car$hp > 145,]
+highhp.car
+lightwt.car <- car[car$wt < 3.2,]
+lightwt.car
+
+index <- match(highhp.car$name, lightwt.car$name)
+index
+
+lightwt.car[na.omit(index),]
+
+v <- c(10,9,8,7,6,5,4,3,2,1)
+7 %in% v
+c(11,5,3,1,0) %in% v
+
+index <- highhp.car$name %in% lightwt.car$name
+index
+
+highhp.car[index,]
+
+str(mtcars)
+mtcars$mpg
+mtcars[["mpg"]]
+mtcars[[1]]
+mtcars[c(1,4)]
+mtcars[c("mpg","hp")]
+
+mtcars[-c(2,3,5,7:11)]
+
+mtcars[-1]
+mtcars[1] <- NULL
+mtcars
+
+mtcars[c(-1,2)]
+
+str(iris)
+iris[1:5,]
+iris[,c("Sepal.Length", "Sepal.Width")]
+
+iris[,"Sepal.Length"]
+iris[,"Sepal.Length", drop=FALSE]
+iris["Sepal.Length"]
+
+iris[1:5,c("Sepal.Length", "Sepal.Width")]
+
+iris[iris$Sepal.Length>7,]
+iris[iris$Sepal.Length>7,c("Sepal.Length", "Sepal.Width")]
+
+subset(iris, subset=(Sepal.Length > 7),
+       select=c("Sepal.Length", "Sepal.Width","Species"))
+#비복원추출 랜덤샘플
+sample(x=1:10, size = 5)
+sample(x=10, size=5)
+
+sample(x=10, size=5, replace=TRUE)
+
+sample(10)
+set.seed(1)
+sample(x=100, size=5, replace=TRUE)
+sample(x=100, size=5, replace=TRUE)
+sample(x=100, size=5, replace=TRUE)
+
+sample(iris, 3)       
+
+set.seed(1)
+index <- sample(nrow(iris), 3)
+index
+iris[index,]
+
+duplicated(c(1,2,3,1,1,4,3))
+
+id <- c("A001", "A002", "A006")
+name <- c("Mouse", "Keyboard", "USB")
+price <- c(30000, 90000, 50000)
+product <- data.frame(id=id, name=name, price=price)
+product
+product <- rbind(product, c("A001", "Mouse", 30000))
+product
+
+duplicated(product)
+product[!duplicated(product),]
+which(duplicated(product))
+index <- which(duplicated(product))
+product[-index,]
+
+unique(product)
+
+str(airquality)
+
+complete.cases(airquality)
+
+airquality.nona <- airquality[complete.cases(airquality),]
+str(airquality.nona)
+
+airquality.nona <- na.omit(airquality)
+str(airquality.nona)
+
+cut(x=iris$Sepal.Width, breaks=c(0,1,2,3,4,5))
+cut(x=iris$Sepal.Width, breaks=5)
+
+iris.cut <- cut(x=iris$Sepal.Width, breaks=c(0,1,2,3,4,5))
+table(iris.cut)
+summary(iris.cut)
+iris.cut <- cut(x=iris$Sepal.Width, 
+                breaks=c(0,1,2,3,4,5),
+                labels=c("Smaller","Small","Medium","big","Bigger"))
+iris.cut
+table(iris.cut)
+
+#apply 함수들
+?apply
+
+x <- matrix(1:20, 4, 5)
+x
+apply(X=x, MARGIN=1, FUN=max)
+apply(X=x, MARGIN=2, FUN=min)
+
+y <- array(1:24, c(4,3,2))
+y
+
+apply(y, 1, paste, collapse=",")
+a <- c(1,5,9,13,17,21
+       )
+a
+paste(a)
+paste(a, collapse = ",")
+
+apply(y, 2, paste, collapse=",")
+apply(y, 3, paste, collapse=",")
+
+apply(y, c(1,2), paste, collapse=",")
+
+Titanic
+str(Titanic)
+
+apply(Titanic, 1, sum)
+
+apply(Titanic, 4, sum)
+apply(Titanic, "Class", sum)
+apply(Titanic, c(1,4), sum)
+
+lapply()
+sapply()
+
+exams <- list(s20=c(78,89,91,85,95,98),
+              s21 = c(85,86,97,99,90),
+              s22 = c(98,96,89,90,93,85,92),
+              s23 =c(98,96,91,88,93,99))
+exams
+
+lapply(exams, length)
