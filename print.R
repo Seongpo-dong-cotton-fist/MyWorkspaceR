@@ -2333,3 +2333,112 @@ for (i in seq(from=5, to=25, by=5)) print(i)
 
 i <- 1
 for (i in seq(from=5, to=25, by=5)) print(i)
+
+#mode : numeric, character, logical, list, function
+mode(1.414)
+mode(c(1.414, 1.732))
+mode("batman")
+mode(c("batman", "Superman"))
+mode(factor("High", "Medium", "Low"))
+mode(as.Date("2030-12-31"))
+mode(5 > 2)
+mode(list(1.23, "Apple", c(2,3,545,6)))
+mode(data.frame(x=1:3, y=c("H","M","L")))
+mode(mean)
+
+# class
+
+d <- as.Date("2030-12-31")
+mode(d)
+length(d)
+class(d)
+as.integer(d)
+d + 1
+
+print.Date()
+print.data.frame()
+print.lm()
+methods(print)
+
+as.character()
+as.numeric()
+as.integer()
+as.logical()
+
+as.numeric(1.618)
+as.integer(1.618)
+as.character(1.618)
+as.numeric("gold")
+
+as.numeric(c("-1", "1.618", "3.14"))
+as.numeric(c("-1", "1.618", "3.14", "and"))
+as.character(11:15)
+
+as.numeric(FALSE)
+as.numeric(TRUE)
+
+# 데이터 구조에서의 변환
+as.data.frame()
+as.list()
+as.matrix()
+as.vector()
+as.factor()
+
+is.data.frame()
+is.list()
+is.matrix()
+is.vector()
+is.factor()
+
+# vector
+vec <- 1:6
+vec
+as.list(vec)
+list(vec)
+cbind(vec)
+as.matrix(vec)
+rbind(vec)
+matrix(vec,2,3)
+as.data.frame(vec)
+rbind(vec)
+as.data.frame(rbind(vec))
+
+# matrix
+mat <- matrix(1:6, 2, 3)
+mat
+as.vector(mat)
+as.list(mat)
+as.data.frame(mat)
+
+# list
+lst <- list(odd=c(1,3,5), even=c(2,4,6))
+lst
+unlist(lst)
+as.vector(lst)
+lst2 <- list(odd=c(1,3,5), even=c("two","four", "six"))
+lst2
+unlist(lst2)
+matrix(unlist(lst), 3, 2)
+matrix(unlist(lst), 3,2, dimnames=list(NULL, names(lst)))
+matrix(lst)
+as.matrix(lst)
+as.data.frame(lst)
+as.data.frame(lst2)
+str(as.data.frame(lst2)$odd)
+str(as.data.frame(lst2)$even)
+
+#data frame
+dfm <- data.frame(odd=c(1,3,5), evne=c(2,4,6))
+dfm
+dfm[,1]
+dfm[[1]]
+dfm[1,]
+str(dfm[1,])
+as.vector(as.matrix(dfm))
+dfm2 <- data.frame(odd=c(1,3,5), even=c("two","four","six"))
+dfm2
+as.vector(as.matrix(dfm))
+as.list(dfm)
+as.list(dfm2)
+as.matrix(dfm)
+as.matrix(dfm2)
