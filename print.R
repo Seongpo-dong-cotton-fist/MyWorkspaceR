@@ -2555,6 +2555,42 @@ iris[iris$Sepal.Length>7,c("Sepal.Length", "Sepal.Width")]
 
 subset(iris, subset=(Sepal.Length > 7),
        select=c("Sepal.Length", "Sepal.Width","Species"))
+
+#sort
+x <-  c(3,7,5,1,2,5)
+sort(x)
+sort(x, decreasing=TRUE)
+
+length(x) <- 7
+x
+sort(x)
+sort(x, na.last = TRUE)
+sort(x, na.last=FALSE)
+
+y <- c(33,11,55,22,44)
+order(y)
+y[order(y)]
+
+sort(y)
+
+y <- c(33,11,55,22,44)
+z <- c("superman", "batman", "ironman", "antman", "spiderman")
+df <- data.frame(y,z)
+df
+order(df$y)
+df[order(df$y),]
+df[order(df$y, decreasing = TRUE),]
+df[order(-df$y),]
+
+w <- c("can fly", "cannot fly", "cannot fly","can fly","cannot fly")
+df <- data.frame(y,z,w)
+df
+df[order(df$w, df$y),]
+library(dplyr)
+
+df[order(desc(df$w),y),]
+arrange(df, w, y)
+arrange(df, desc(w),y)
 #비복원추출 랜덤샘플
 sample(x=1:10, size = 5)
 sample(x=10, size=5)
@@ -2656,3 +2692,626 @@ exams <- list(s20=c(78,89,91,85,95,98),
 exams
 
 lapply(exams, length)
+sapply(exams, length)
+
+sapply(exams, mean)
+sapply(exams, sd)
+
+sapply(exams, range)
+
+head(iris)
+
+lapply(iris, class)
+sapply(iris, class)
+
+sapply(iris, mean)
+sapply(iris, function(x) ifelse(is.numeric(x), mean(x), NA))
+
+mapply(rep, 1:4, 4:1)
+rep(1,4)
+rep(2,3)
+rep(3,2)
+rep(4,1)
+
+
+
+#map
+exams <- list(s20=c(78,89,91,85,95,98),
+              s21 = c(85,86,97,99,90),
+              s22 = c(98,96,89,90,93,85,92),
+              s23 =c(98,96,91,88,93,99))
+library(purrr)
+map(.x=exams, .f=mean)
+
+map_lgl()
+map_int()
+map_dbl()
+map_chr()
+    
+map_dbl(exams, mean)
+?mean
+map_dbl(exams, mean, trim=0.3)
+exams %>%
+  map_dbl(mean, trim=0.3)
+
+exams %>%
+  map(range)
+exams %>%
+  map(range) %>%
+  map_dbl(diff)
+
+exams %>%
+  map(function(x) x*1.1)
+
+exams %>%
+  map(~.*1.1)
+
+fruits <- c("Apple", "Banana", "Strawberry")
+fruits%>%
+  map_chr(paste, "Juice", sep="-")
+fruits%>%
+  map_chr(~paste(.x, "Juice", sep="-"))
+
+lst <- list(list(num=1:3, letters[1:3]),
+            list(num=101:103, chr=letters[4:6]),
+            list(),
+            list(num=c(9, 99), chr=letters[7:9]))
+lst
+
+lst %>%
+  map("num", .default="???")
+
+lst %>%
+  map("chr", .default=NA)
+
+lst %>%
+  map(2, .default=NA)
+
+lst %>%
+  map(c(2,2))
+
+lst %>%
+  map_chr(c(2,2), .default=NA)
+
+lst %>%
+  map(list("num", 3))
+lst %>%
+  map(list("num", 3), .default=NA)
+
+str(USArrests)
+USArrests %>%
+  map_dbl(mean)
+USArrests %>%
+  map_dbl(range)
+USArrests %>%
+  map(range)
+USArrests %>%
+  map_dfr(range)
+
+str(mtcars)
+
+mtcars %>%
+  split(.$am)
+models <- mtcars %>%
+  split(.$am) %>%
+  map(~lm(mpg ~ wt, data=.))
+  
+models
+model0 <- summary(models$`0`)
+str(model0)
+
+names(model0)
+model0$r.squared
+
+models %>%
+  map(summary) %>%
+  map_dbl(function(x) x$r.squared)
+models %>%
+  map(summary) %>%
+  map_dbl(~.$r.squared)
+models %>%
+  map(summary) %>%
+  map_dbl(~.x$r.squared)
+models %>%
+  map(summary) %>%
+  map_dbl("r.squared")
+
+mtcars %>%
+  split(.$am) %>%
+  map(~lm(mpg ~ wt, data=.)) %>%
+  map(summary) %>%
+  map_dbl("r.squared")
+
+
+#map2
+
+a <- list(1,2,3)
+map(.x=a, .f=function(x) x*1.1)
+
+map2_*lgl()
+map2_*int()
+map2_*dbl()
+map2_*chr()
+pmap_*lgl()
+pmap_*int()
+pmap_*dbl()
+pmap_*chr()
+
+a <- list(1,2,3)
+b <- list(10,20,30)
+map2(.x=a, .y=b, .f=function(first, second) second - first)
+
+map2(.x=a, .y=b, .f=~.y-.x)
+
+map2_dbl(a, b, ~.y-.x)
+
+set.seed(123)
+map2(b,a,rnorm, n=5)
+?rnorm
+
+set.seed(123)
+list(rnorm(mean=10, sd=1, n=5),
+     rnorm(mean=20, sd=2, n=5),
+     rnorm(mean=30, sd=3, n=5))
+
+str(mtcars)
+
+by.am <-  mtcars %>%
+  split(.$am)
+by.am
+
+models <- by.am %>%
+  map(~lm(mpg ~wt, data=.))
+models
+
+map2(models, by.am, predict)
+
+list(predict(models$`0`, by.am$`0`),
+  predict(models$`1`, by.am$`1`))
+
+a <- list(1,2,3)
+b <- list(10,20,30)
+c <- list(100,200,300)
+pmap(.l=list(a,b,c), .f=sum)
+pmap_dbl(.l=list(a,b,c), .f=sum)
+pmap(list(a,b,c),
+     function(first, second, third)
+       second - first +third)
+
+pmap(list(a,b,c), ~..2-..1+..3)
+
+pmap_dbl(list(alpha=a, beta=b, gamma=c),
+         function(gamma,beta, alpha)
+           beta - alpha + gamma)
+
+plus <- function(x,y) x+ y
+pmap_dbl(list(a,b,c), plus)
+plus2 <- function(x,y, ...) x+ y
+pmap_dbl(list(a,b,c), plus2)
+
+args <- list(mean=c(0, 5, 10),
+             sd=c(1,2,3),
+             n=c(1,3,5))
+set.seed(123)
+args %>%
+  pmap(rnorm)
+
+set.seed(123)
+list(rnorm(mean=0, sd=1, n=1),
+     rnorm(mean=5, sd=2, n=3),
+     rnorm(mean=10, sd=3, n=5))
+
+
+args.df <- data.frame(mean=c(0, 5, 10),
+             sd=c(1,2,3),
+             n=c(1,3,5))
+set.seed(123)
+args.df %>%
+  pmap(rnorm)
+
+args2 <- list(c(0, 5, 10),
+             c(1,2,3),
+             c(1,3,5))
+set.seed(123)
+args2 %>%
+  pmap(rnorm)
+
+
+#purrr reduce 패키지
+
+reduce(.x=c(1,3,5,7), .f=`*`)
+((1*3)*5)*7
+
+paste2 <- function(u, v, sep=".") paste(u,v,sep=sep)
+letters[1:4] %>%
+  reduce(paste2)
+
+dfs <- list(data.frame(name="Superman", age=30),
+            data.frame(name=c("Spiderman", "Wonderwoman"),
+                       sex=c("M","F")),
+            data.frame(name="Batman", grade="A"))
+dfs
+
+library(dplyr)
+dfs %>%
+  reduce(bind_rows)
+
+vs <- list(c(1,3,5,6,7,8,10),
+           c(2,3,7,8,10),
+           c(1,2,3,5,7,9,10))
+
+vs
+vs %>%
+  reduce(intersect)
+
+set.seed(123)
+x <- sample(10)
+x
+x %>%
+  reduce(`+`)
+x %>%
+  accumulate(`+`)
+
+reduce2(.x=letters[1:4], .y=c("-", ".", "-"), .f=paste2)
+accumulate2(.x=letters[1:4], .y=c("-", ".", "-"), .f=paste2)
+
+#dplyr함수
+
+head(airquality)
+library(dplyr)
+
+air <- filter(airquality, Month==6)
+
+airquality[airquality$Month==6,]
+subset(airquality, subset=(Month==6))
+
+air <- filter(airquality, Month==6, Temp > 90)
+head(air)
+
+air <- filter(airquality, Month==6, Ozone > 80|Temp > 90)
+head(air)
+
+slice(airquality, 6:10)
+slice(airquality, n())
+slice(airquality, (n()-4):n())
+
+air <- arrange(airquality, Temp, Month, Day)
+head(air)
+air <- arrange(airquality, desc(Temp), Month, Day)
+head(air)
+
+air <- select(airquality, Month, Day, Temp)
+head(air)
+air
+
+air <- select(airquality, -(Temp:Day))
+head(air)
+
+air <- select(airquality, Solar=Solar.R)
+head(air)
+
+air <- rename(airquality, Solar=Solar.R)
+head(air)
+
+distinct(select(airquality, Month))
+
+air <- mutate(airquality, 
+       Temp.C=(Temp-32)/1.8,
+       Diff= Temp.C-mean(Temp.C))
+# transform 변수는 같은 문장에 생성된 함수를 같은 코드줄에 사용 불가능함
+head(air)
+
+summarise(airquality,
+          Mean=mean(Temp, na.rm=TRUE),
+          Median=median(Temp, na.rm=TRUE),
+          SD=sd(Temp, na.rm=TRUE),
+          Max=max(Temp, na.rm=TRUE),
+          Min=min(Temp, na.rm=TRUE),
+          N=n(),
+          Distinct.Month=n_distinct(Month),
+          Distinct.First=first(Month),
+          Distinct.Last=last(Month))
+
+sample_n(airquality, 5)
+sample_frac(airquality, 0.05, replace=TRUE)
+
+air.group <- group_by(airquality, Month)
+class(air.group)
+head(air.group)
+air.group
+
+summarise(air.group,
+          Mean.Temp=mean(Temp, na.rm=TRUE))
+summarise(air.group,
+          Mean.Temp=mean(Temp, na.rm=TRUE),
+          SD.Temp=sd(Temp, na.rm=TRUE),
+          Days=n())
+
+iris %>% head
+
+1:10 %>% mean
+
+a1 <- select(airquality, Ozone, Temp, Month)
+
+a2 <- group_by(a1, Month)
+
+a3 <- summarise(a2,
+                Mean.Ozone=mean(Ozone, na.rm=T),
+                Mean.Temp=mean(Temp, na.rm=T))
+a3
+
+a4 <- filter(a3, Mean.Ozone > 40 | Mean.Temp > 80)
+a4
+
+
+air <- airquality %>% 
+  select(Ozone, Temp, Month) %>% 
+  group_by(Month) %>% 
+  summarise(Mean.Ozone=mean(Ozone, na.rm=T),
+            Mean.Temp=mean(Temp, na.rm=T)) %>% 
+  filter(Mean.Ozone > 40 | Mean.Temp > 80)
+air
+
+#dplyr join
+
+df1 <- data.frame(x=1:6, y=month.name[1:6])
+df2 <- data.frame(x=7:12, y=month.name[7:12])
+df1
+df2
+df3 <- bind_rows(df1, df2)
+df3
+rbind(df1, df2)
+
+df4 <- data.frame(z=month.abb)
+df4
+df5 <- bind_cols(df3, df4)
+df5
+cbind(df3, df4)
+
+band_members
+band_instruments
+
+inner_join(x=band_members, y=band_instruments)
+inner_join(x=band_members, y=band_instruments, by="name")
+
+left_join(x=band_members, y=band_instruments, by="name")
+right_join(x=band_members, y=band_instruments, by="name")
+full_join(x=band_members, y=band_instruments, by="name")
+
+band_instruments2
+full_join(band_members, band_instruments2, by=c("name"="artist"))
+full_join(band_members, band_instruments2, by=c("name"="artist"), keep=T)
+
+semi_join(x=band_members, y=band_instruments, by="name")
+anti_join(x=band_members, y=band_instruments, by="name")
+
+#reshape2
+install.packages("reshape2")
+library(reshape2)
+
+smiths
+
+melt(data=smiths)
+?melt
+
+melt(data=smiths,
+     id.vars = "subject")
+melt(data=smiths,
+     measure.vars = c(2:5))
+melt(data=smiths,
+     measure.vars = c("time","age","weight","height"))
+smiths.long <- melt(data=smiths,
+     id.vars = "subject",
+     measure.vars = c("time","age","weight","height"),
+     variable.name = "var",
+     value.name = "val")
+smiths.long
+
+?dcast
+dcast(data=smiths.long, formula=subject ~ var,
+      value.var = "val")
+
+head(airquality)
+aq.long <- melt(airquality,
+                id.vars=c("Month", "Day"))
+head(aq.long)
+tail(aq.long)
+
+aq.wide <- dcast(aq.long,
+                 Month + Day ~ variable,
+                 value.var = "value")
+head(aq.wide)
+
+?dcast
+dcast(aq.long, Month ~ variable)
+dcast(aq.long, Month ~ variable,
+      fun.aggregate =mean, na.rm=T)
+
+#tidyr
+
+install.packages("tidyr")
+library(tidyr)
+
+head(airquality)
+
+?gather
+
+aq.long <- gather(airquality,
+                  key = Factor,
+                  value=Measurement,
+                  Ozone:Temp)
+head(aq.long)
+aq.long <- gather(airquality,
+                  key = Factor,
+                  value=Measurement,
+                  -Month, -Day)
+head(aq.long)
+aq.long <- gather(airquality,
+                  key = Factor,
+                  value=Measurement,
+                  1:4)
+head(aq.long)
+aq.long <- gather(airquality,
+                  key = Factor,
+                  value=Measurement,
+                  Ozone, Solar.R,Wind, Temp)
+head(aq.long)
+
+airquality %>% gather(Factor, Measurement, Ozone:Temp)
+
+aq.wide <- spread(data=aq.long, key=Factor, value=Measurement)
+head(aq.wide)
+
+aq.long %>% spread(key=Factor, value=Measurement)
+
+seperate()
+unite()
+
+head(iris)
+iris.long <- gather(iris, Element, Measurement,
+                    -Species)
+head(iris.long)
+
+iris.sep <- separate(data=iris.long,
+                     col=Element,
+                     into=c("Part", "Measures"))
+head(iris.sep)
+
+iris.unite <- unite(data=iris.sep,
+                    col = Factor,
+                    Part, Measures,
+                    sep="_")
+head(iris.unite)
+
+#tydyr pivot longer/wider
+
+head(airquality)
+?pivot_longer
+
+aq.long <- pivot_longer(data=airquality,
+                        cols=Ozone:Temp,
+                        names_to ="Factor" ,
+                        values_to ="Measurement" )
+head(aq.long)
+
+?pivot_wider
+
+aq.wide <- pivot_wider(data=aq.long,
+                       names_from=Factor,
+                       values_from=Measurement)
+head(aq.wide)
+
+#tidyr nest
+library(tidyr)
+df <- tibble(x=c(1,1,1,2,2,3), y=1:6, z=6:1)
+df
+df.nested <- nest(.data=df, ndata=c(y, z))
+df.nested
+df.nested$ndata
+df.nested$ndata[[2]]
+
+unnest(df.nested, cols=ndata)
+
+head(iris)
+
+iris.nested <- iris %>%
+  nest(sepal=c("Sepal.Length", "Sepal.Width"),
+       petal=c("Petal.Length", "Petal.Width"))
+iris.nested$sepal
+
+head(mtcars)
+
+library(dplyr)
+mtcars.n <- mtcars %>% 
+  group_by(cyl) %>% 
+  nest()
+mtcars.n$data
+
+library(purrr)
+
+mtcars.m <- mtcars.n %>% 
+  mutate(model=map(data, ~lm(mpg ~ wt, data=.x))) %>% 
+  arrange(cyl)
+mtcars.m
+mtcars.m$model
+
+mtcars.m %>% 
+  transmute(cyl, beta=map_dbl(model, ~coefficients(.)[[2]])) %>% 
+  ungroup()
+
+# graphic
+str(faithful)
+
+plot(faithful)
+
+eruptions.long <- faithful[faithful$eruptions > 3, ]
+
+points(eruptions.long, col="red", pch=19)
+
+dev.off()
+points(eruptions.long, col="red", pch=19)
+
+faithful.lm <- lm(waiting ~ eruptions, data=faithful)
+
+plot(faithful)
+points(eruptions.long, col="red", pch=19)
+lines(x=faithful$eruptions, y=fitted(faithful.lm), col="blue")
+
+abline(v=3, col="purple")
+abline(h=mean(faithful$waiting), col="green")
+abline(faithful.lm, col="blue")
+
+# generic function
+str(cars)
+plot(cars$speed, cars$dist)
+plot(cars)
+
+str(ToothGrowth)
+plot(ToothGrowth$supp, ToothGrowth$len)
+
+str(iris)
+plot(iris[,1:4])
+
+str(nhtemp)
+plot(nhtemp)
+
+str(UCBAdmissions)
+plot(UCBAdmissions)
+
+str(faithful)
+faithful.lm <- lm(waiting ~ eruptions, data=faithful)
+class(faithful.lm)
+plot(faithful.lm)
+
+plot(faithful)
+list.files(pattern="sgoi.jpeg")
+library(pander)
+openFileInOS("sgoi.jpeg")
+
+windows(width=12, height=8)
+plot(faithful)
+savePlot(filename = "sgoi", type = "pdf")
+list.files(pattern="sgoi.pdf")
+openFileInOS("sgoi.pdf")
+
+?png
+?pdf
+?postscript
+
+png("sgoi.png", width=648, height = 432)
+plot(faithful)
+dev.off()
+list.files(pattern="sgoi.png")
+openFileInOS("sgoi.png")
+
+# 그래프 패러미터 설정
+plot(faithful)
+
+# 제목과 축
+plot(faithful,
+     main="Old Faithful Geyser",
+     sub="Yellowstone National Park",
+     xlab="Eruption time (minutes)",
+     ylab="Waiting time (minutes)")
+
+# 심볼과 선
