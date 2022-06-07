@@ -3637,5 +3637,410 @@ detach(mtcars)
 # library(extrafont)
 # font_import(paths=NULL, recursive=TRUE, prompt=TRUE, pattern=NULL)
 
+# pie 원 차트
+
+slice <- c(325,285,706,885)
+lbl <- c("1st Class","2st Class","3st Class","crew")
+pie(slice, labels = lbl, main="Pie chart of Titanic Passengers")
+
+str(Titanic)
+class <- margin.table(Titanic, margin=1)
+class
+pie(class, main="Pie chart of Titanic Passengers")
+
+lbl <- paste(names(class), ":", class, sep="")
+lbl
+pie(class, labels = lbl, main="Pie chart of Titanic Passengers")
+
+class.pct <- round(class/sum(class)*100, 1)
+class.pct
+lbl <- paste(names(class), ":", class.pct,"%", sep="")
+lbl
+pie(class, labels = lbl, main="Pie chart of Titanic Passengers")
+pie(class, labels = lbl, col=rainbow(length(class.pct)),
+    main="Pie chart of Titanic Passengers")
+
+# 부채차트
+install.packages("plotrix")
+library(plotrix)
+fan.plot(class, labels=names(class),
+         main="Pie chart of titanic passengers")
+
+# 막대도표
+str(Titanic)
+class <- margin.table(Titanic, margin=1)
+class
+barplot(class,
+        main="Simple Bar Chart")
+barplot(class,
+        xlab="Class", ylab="Number of Passengers",
+        main="Simple Bar Chart")
+barplot(class, horiz=T,
+        xlab="Class", ylab="Number of Passengers",
+        main="Simple Bar Chart")
+
+survival.by.class <- margin.table(Titanic, margin=c(4,1))
+survival.by.class
+barplot(survival.by.class,
+        main="Stacked Bar Chart")
+barplot(survival.by.class, beside=T,
+        main="Grouped Bar Chart")
+barplot(survival.by.class, beside=T,
+        names.arg = c("1st Class", "2nd Class", "3rd Class", "Crew"),
+        cex.names = 0.75, col=c("red", "green"),
+        ylab = "Survivors", las=1, ylim=c(0,1000),
+        main="Grouped Bar Chart")
+legend(x=1,y=900, legend=c("Dead", "Alive"),
+       fill=c("red", "green"), title="Status")
+
+survival.by.class
+survival.prop <- prop.table(survival.by.class, margin=2)
+survival.prop
+barplot(survival.prop, col=c("maroon", "skyblue"),
+        xlab="Class", ylab="Ratio of Survivors", las=1,
+        main="Survivors by Class (Ratio)")
+
+install.packages("vcd")
+library(vcd)
+spine(t(survival.by.class), gp=gpar(fill=c("mistyrose", "lightblue")),
+      main = "Spine plot ofSurvivors by Class")
+
+str(chickwts)
+heights <- tapply(chickwts$weight, chickwts$feed, mean)
+heights
+barplot(heights, xlab="Feed type", ylab="Mean Chicken Weights (g)",
+        ylim=c(0,400), las=1, main="Chicken weights by feed type")
 
 
+str(UCBAdmissions)
+admission.by.dept <- margin.table(UCBAdmissions, c(1,3))
+admission.by.dept
+barplot(admission.by.dept, density=15, angle=135)
+barplot(admission.by.dept, border="red", col=c("lightblue", "mistyrose"))
+barplot(admission.by.dept, beside=T, space=c(0.3, 2.0))
+barplot(admission.by.dept, axes=F)
+
+# 히스토그램
+hist()
+
+str(iris)
+hist(iris$Sepal.Width)
+
+?hist
+hist(iris$Sepal.Width, breaks=20)
+hist(iris$Sepal.Width, breaks=seq(2.0, 4.4, 0.2))
+hist(iris$Sepal.Width, breaks=seq(2.0, 4.4, 0.2),
+     labels = T)
+hist(iris$Sepal.Width, breaks=seq(2.0, 4.4, 0.2),
+     labels = T, density=15, angle=135,
+     xlim=c(2, 4.5), ylim=c(0,40),
+     xlab="Sepal Width(cm)")
+
+hist(iris$Sepal.Width, breaks=seq(2.0, 4.4, 0.2), prob=T,
+     col="gold", border="hotpink",
+     xlim=c(2, 4.5), ylim=c(0, 1.5),
+     xlab="Sepal Width(cm)")
+
+density(iris$Sepal.Width)
+lines(density(iris$Sepal.Width), col="violet", lwd=2)
+
+quantile(iris$Sepal.Width)
+rug(quantile(iris$Sepal.Width), col="red", lwd=3)
+
+hist(iris$Sepal.Width, breaks=seq(2.0, 4.4, 0.2), prob=T,
+     col="gold", border="hotpink",
+     xlim=c(2, 4.5), ylim=c(0, 1.5),
+     xlab="Sepal Width(cm)")
+
+x <- seq(min(iris$Sepal.Width), max(iris$Sepal.Width), length=40)
+y <- dnorm(x, mean=mean(iris$Sepal.Width), sd=sd(iris$Sepal.Width))
+lines(x,y, col="chocolate", lwd=2)
+box()
+
+#  밀도도표
+density()
+plot()
+
+str(iris)
+
+ds <- density(iris$Sepal.Width)
+plot(ds)
+
+ds <- density(iris$Sepal.Width)
+plot(ds, main="Density of sepal width")
+polygon(ds, col="tomato", border="blue")
+rug(iris$Sepal.Width, col="brown")
+
+install.packages("sm")
+library(sm)
+attach(iris)
+sm.density.compare(x=Sepal.Width, group=Species,
+                   xlab="sepal width (cm)")
+title(main="Distirbution of Sepal width by Iris Species")
+legend("topright", legend=levels(Species),
+       lty=c("solid","dashed","dotted"), 
+       col=c("red", "green3", "blue"))
+
+# 상자수염도표
+boxplot()
+
+str(iris)
+
+boxplot(iris$Sepal.Width)
+boxplot(iris$Sepal.Width,
+        ylab="Sepal Width (cm)", main = "Sepal width of Iris")
+
+boxplot.stats(iris$Sepal.Width)
+
+boxplot(Sepal.Width ~ Species, data=iris,
+        ylab="Sepal Width (cm)", main = "Sepal width of Iris")
+
+?boxplot
+
+boxplot(Sepal.Width ~ Species, data=iris,
+        notch=T, border="royalblue", las=1,
+        col=c("sienna", "plum", "coral"),
+        ylab="Sepal Width (cm)", main = "Sepal width of Iris")
+
+boxplot(Sepal.Width ~ Species, data=iris,
+        notch=T, border="royalblue", las=1,
+        col=c("sienna", "plum", "coral"),
+        ylab="Sepal Width (cm)", 
+        xlab="",
+        names=c("Setosa", "Versicolor", "Virginica"),
+        main = "Sepal width of Iris")
+
+boxplot(Sepal.Width ~ Species, data=iris, horizontal=T,
+        notch=T, border="royalblue", las=1,
+        col=c("sienna", "plum", "coral"),
+        xlab="Sepal Width (cm)", 
+        ylab="",
+        names=c("Setosa", "Versicolor", "Virginica"),
+        main = "Sepal width of Iris")
+
+str(mtcars)
+
+mtcars$cyl.factor <- factor(mtcars$cyl,
+                            levels=c(4,6,8), labels=c("4","6","8"))
+mtcars$am.factor <- factor(mtcars$am,
+                            levels=c(0,1),
+                            labels=c("Auto","Manual"))
+
+boxplot(mpg ~ am.factor * cyl.factor, data=mtcars)
+boxplot(mpg ~ am.factor * cyl.factor, data=mtcars,
+        col=c("salmon", "violet"), las=1, 
+        xlab="Car Type", ylab="Milers per Gallon",
+        main="car Mileage by Type")
+boxplot(mpg ~ am.factor * cyl.factor, data=mtcars,
+        col=c("salmon", "violet"), las=1, 
+        varwidth=T,
+        xlab="Car Type", ylab="Milers per Gallon",
+        main="car Mileage by Type")
+boxplot(mpg ~ am.factor * cyl.factor, data=mtcars,
+        col=c("salmon", "violet"), las=1, 
+        varwidth=T, at=c(1,2,3.5,4.5,6,7),
+        xlab="Car Type", ylab="Milers per Gallon",
+        main="car Mileage by Type")
+windows(width=12, height=8)
+
+
+# 바이올린도표
+install.packages("vioplot")
+library(vioplot)
+
+str(mtcars)
+vioplot(mpg ~ cyl, data=mtcars)
+# 무섭게생김;;
+vioplot(mpg ~ cyl, data=mtcars,
+        col="gold", border="red", colMed="magenta",
+        names=c("4-cylinder","6-cylinder","8-cylinder"),
+        xlab="Number of Cylinders", ylab="Miles per Gallon",
+        main="Car Mileage by Cylinder")
+
+c4 <- mtcars$mpg[mtcars$cyl==4]
+c6 <- mtcars$mpg[mtcars$cyl==6]
+c8 <- mtcars$mpg[mtcars$cyl==8]
+
+vioplot(c4, c6, c8, data=mtcars,
+        col="gold", border="red", colMed="magenta",
+        names=c("4-cylinder","6-cylinder","8-cylinder"),
+        xlab="Number of Cylinders", ylab="Miles per Gallon",
+        main="Car Mileage by Cylinder")
+
+x <- mtcars$wt
+y <- mtcars$mpg
+plot(x,y, pch=20, col="darkblue", ann=F)
+max(x); max(y)
+plot(x,y, xlim=c(0,6), ylim=c(0,36),
+     pch=20, col="darkblue", ann=F)
+vioplot(y, col="lightblue", rectCol = "gray", lty=2, add=T)
+vioplot(x, col="lightsalmon", rectCol = "gray", lty=2, add=T,
+        horizontal = T, wex=6, at=4)
+title("Car Mieage vs. Car weight",
+      xlab="Weight (1,000 lbs)", ylab="Miles per Gallon")
+
+# dotchart
+str(mtcars)
+install.packages("dotchart")
+head(mtcars)
+
+dotchart(mtcars$mpg, labels=row.names(mtcars))
+dotchart(mtcars$mpg, labels=row.names(mtcars), cex=0.7,
+         xlab="Miles per Gallon",
+         main="Milleage for Car Models")
+
+cars <- mtcars[order(mtcars$mpg),]
+cars
+cars$cyl.f <- factor(cars$cyl, levels=c(4,6,8),
+                     labels=c("4 cylinders",
+                              "6 cylinders",
+                              "8 cylinders"))
+dotchart(cars$mpg, labels=row.names(mtcars), cex=0.7,
+         groups=cars$cyl.f, gcolor="dimgray",
+         xlab="Miles per Gallon",
+         main="Milleage for Car Models by Cylinders")
+
+cars$colors[cars$cyl.f=="4 cylinders"] <- "maroon"
+cars$colors[cars$cyl.f=="6 cylinders"] <- "deepskyblue"
+cars$colors[cars$cyl.f=="8 cylinders"] <- "darkgreen"
+dotchart(cars$mpg, labels=row.names(mtcars), cex=0.7,
+         groups=cars$cyl.f, gcolor="dimgray",
+         color=cars$colors, pch=19,
+         xlab="Miles per Gallon",
+         main="Milleage for Car Models by Cylinders")
+
+VADeaths
+dotchart(VADeaths, cex=0.8)
+dotchart(t(VADeaths), cex=0.8)
+
+# line plot 선도표
+
+Orange
+tree1 <- subset(Orange, Tree==1)
+tree1
+plot(tree1$age, tree1$circumference,
+     xlab="Age (days)", ylab = "Circumference (mm)",
+     main="Growth of Orange Tree 1")
+plot(tree1$age, tree1$circumference, type="l",
+     xlab="Age (days)", ylab = "Circumference (mm)",
+     main="Growth of Orange Tree 1")
+plot(tree1$age, tree1$circumference, type="b",
+     xlab="Age (days)", ylab = "Circumference (mm)",
+     main="Growth of Orange Tree 1")
+plot(tree1$age, tree1$circumference, type="o",
+     xlab="Age (days)", ylab = "Circumference (mm)",
+     main="Growth of Orange Tree 1")
+
+Orange
+
+xlim <- range(Orange$age)
+xlim
+ylim <- range(Orange$circumference)
+ylim
+plot(xlim, ylim, type="n",las=1, bty="l",
+     xlab="Age (days)", ylab = "Circumference (mm)",
+     main="Growth of Orange Tree 1")
+
+ntree <- max(as.numeric(Orange$Tree))
+ntree
+
+colors <- c(1:ntree)+1
+colors
+linetype <- c(1:ntree)
+linetype
+plotchar <- c(1:ntree)+18
+plotchar
+
+for( i in 1:ntree) {
+  tree <- subset(Orange, Tree==i)
+  lines(tree$age, tree$circumference, 
+        type="b", lwd=2,
+        lty=linetype[i], col=colors[i], pch=plotchar[i])
+}
+legend(xlim[1], ylim[2], 1:ntree,
+       col=colors, pch=plotchar, lty=linetype,
+       title="Trees")
+
+# 산점도
+str(iris)
+plot(iris$Petal.Length, iris$Petal.Width)
+with(iris, plot(Petal.Length, Petal.Width))
+
+plot(Petal.Width ~ Petal.Length, data = iris)
+
+with(iris, plot(Petal.Length, Petal.Width,
+                pch=as.integer(Species)))
+as.integer(Species)
+?points
+
+with(iris, plot(Petal.Length, Petal.Width,
+                pch=as.integer(Species)))
+levels(iris$Species)
+legend(x=1.2, y=2.4, legend=c("setosa",     "versicolor", "virginica"),
+       pch=1:3)
+levels(iris$Species)
+legend(x=1.2, y=2.4, legend=as.character(levels(iris$Species)),
+       pch=1:length(levels(iris$Species)))
+
+legend(locator(1), legend=as.character(levels(iris$Species)),
+       pch=1:length(levels(iris$Species)))
+
+with(iris, plot(Petal.Length, Petal.Width,
+                pch=as.integer(Species),
+                col=as.integer(Species)))
+
+legend(x=1.2, y=2.4, 
+       legend=as.character(levels(iris$Species)),
+       pch=1:length(levels(iris$Species)),
+       col=1:length(levels(iris$Species)))
+
+
+with(iris, plot(Petal.Length, Petal.Width,
+                pch=19,
+                col=as.integer(Species)+1))
+
+legend(x=1.2, y=2.4, 
+       legend=as.character(levels(iris$Species)),
+              fill = (1:length(levels(iris$Species)))+1)
+
+rm(list = ls())
+install.packages("car")
+library(car)
+scatterplot()
+str(mtcars)
+scatterplot(mpg ~ wt | cyl, data=mtcars,
+            boxplots="xy", lwd=2,
+            pch=c(15, 16, 17),
+            col=c("red", "green3", "blue"))
+
+str(iris)
+plot(iris[1:2])
+plot(iris[1:4])
+
+pairs(iris[1:4])
+pairs( ~ Sepal.Length + Sepal.Width +
+         Petal.Length + Petal.Width,
+       data=iris)
+pairs( ~ Sepal.Length + Sepal.Width +
+         Petal.Length + Petal.Width,
+       data=iris, upper.panel=NULL)
+
+install.packages("psych")
+install.packages("tmvnsim")
+library(psych)
+pairs.panels(iris[1:4])
+
+?points
+levels(iris$Species)
+pairs.panels(iris[1:4], pch=21,
+             bg=c("red", "green", "blue")[iris$Species],
+             lm=T)
+
+pairs.panels(iris[1:4], pch=21+as.numeric(iris$Species),
+             bg=c("red", "green", "blue")[iris$Species],
+             hist.col="gold")
+
+install.packages("PerformanceAnalytics")
+library(PerformanceAnalytics)
+chart.Correlation(iris[1:4], pch=21,
+                  bg=c("red", "green", "blue")[iris$Species])
